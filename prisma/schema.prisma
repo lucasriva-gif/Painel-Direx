@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("member")
+  avatar       String?
+  paginas      Json?
+  unidades     Json?
+  indicadores  Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  columns     Column[]
+  tasks       Task[]
+}
+
+model Column {
+  id        String   @id @default(cuid())
+  title     String
+  order     Int
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks     Task[]
+
+  @@index([projectId, order])
+}
+
+model TodoItem {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  completed    Boolean   @default(false)
+  priority     String    @default("MEDIUM")
+  dueDate      DateTime?
+  username     String
+  createdBy    String?
+  kanbanTaskId String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  kanbanTask   Task?     @relation(fields: [kanbanTaskId], references: [id], onDelete: SetNull)
+
+  @@index([kanbanTaskId])
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  priority    String   @default("LOW")
+  assignee    String?
+  order       Int
+  columnId    String
+  projectId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  todos       TodoItem[]
+
+  @@index([columnId, order])
+  @@index([projectId])
+}
