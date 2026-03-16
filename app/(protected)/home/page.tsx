@@ -1,6 +1,9 @@
 import Navbar from '@/components/home/Navbar'
 import Hero from '@/components/home/Hero'
 import ResumoCard from '@/components/home/ResumoCard'
+import NivelServico from '@/components/home/NivelServico'
+import Produtividade from '@/components/home/Produtividade'
+import Footer from '@/components/home/Footer'
 
 export default function HomePage() {
   return (
@@ -10,14 +13,10 @@ export default function HomePage() {
         {/* seções */}
         <Hero />     
         <ResumoCard />                                   
-
-        <section id="nivel-servico" className="min-h-screen bg-gray-100">
-          <p className="p-10">Nível de Serviço aqui</p>
-        </section>
-        <section id="produtividade" className="min-h-screen bg-gray-50">
-          <p className="p-10">Produtividade aqui</p>
-        </section>
+        <NivelServico />
+        <Produtividade />
       </main>
+      <Footer />
     </div>
   )
 }
