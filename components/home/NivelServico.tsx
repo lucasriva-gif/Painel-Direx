@@ -17,7 +17,7 @@ const dashboards = [
   { nome: 'Época 1P', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/PsVendas-NveldeServiopoca1P/EpocaGeral?:iid=2 Pós Venda - Nível de Serviço HUB GFL -', icone: '/images/icones/dash-1.jpg' },
   { nome: 'Netshoes 1P', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/NveldeServio-Netshoes/NveldeServio-Netshoes?:iid=3', icone: '/images/icones/dash-1.jpg' },
   { nome: '1P Saída CD Entrega a Domicílio', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/NveldeservioDEZ2023-PILOTO/PerformanceGeral?:iid=2', icone: '/images/icones/dash-1.jpg' },
-  { nome: 'Consta Entregue', descricao: '(Acesse PPT ou Dash)', href: 'https://google.com', icone: '/images/icones/dash-1.jpg' },
+  { nome: 'Consta Entregue', descricao: '(Acesse PPT ou Dash)', href: 'https://docs.google.com/presentation/d/1PJbPKD39CybxiL9TJF68B92fh4pwFCmirkpkPqfozI8/edit?slide=id.g3af52249f21_2_31#slide=id.g3af52249f21_2_31', icone: '/images/icones/dash-3.svg' },
 ]
 
 export default function NivelServico() {

@@ -11,7 +11,7 @@ const metricas = [
 const dashboards = [
   { nome: 'Carteira CDs', descricao: 'Descrição em 1 linha', href: 'https://lookerstudio.google.com/u/0/reporting/767e51a9-f613-4f6d-9eb5-20ee385d5c5d/page/p_x8qfw2rvmd', icone: '/images/icones/dash-2.svg' },
   { nome: 'Aderência PMT CDs', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/AcompanhamentoEntradasRealTime/CockPit_CDs_CurrentDate?:iid=1', icone: '/images/icones/dash-1.jpg' },
-  { nome: 'Avaria Transporte', descricao: '(Acesse PPT ou Dash)', href: 'https://google.com/', icone: '/images/icones/dash-1.jpg' },
+  { nome: 'Avaria Transporte', descricao: '(Acesse PPT ou Dash)', href: 'https://google.com/', icone: '/images/icones/dash-3.svg' },
 ]
 
 export default function Produtividade() {

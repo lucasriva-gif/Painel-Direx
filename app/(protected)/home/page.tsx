@@ -4,6 +4,7 @@ import ResumoCard from '@/components/home/ResumoCard'
 import NivelServico from '@/components/home/NivelServico'
 import Produtividade from '@/components/home/Produtividade'
 import Footer from '@/components/home/Footer'
+import ChatBot from '@/components/home/ChatBot'
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
         <NivelServico />
         <Produtividade />
       </main>
+      <ChatBot />
       <Footer />
     </div>
   )
