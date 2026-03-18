@@ -35,7 +35,7 @@ const ChatBot: React.FC = () => {
     setIsTyping(true);
 
     const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
+    setMessages([...updatedMessages, { role: 'assistant', content: '' }]);
 
     try {
       const response = await fetch("/api/chat", {
@@ -44,29 +44,48 @@ const ChatBot: React.FC = () => {
         body: JSON.stringify({
             model: 'qwen3:30b',
             messages: [...updatedMessages],
-            stream: false,
+            stream: true,
         }),
       });
 
-        if (!response.ok) {
+    if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
-        }
+      }
+      
+      if (!response.body) throw new Error("Sem corpo de resposta");
 
-        const data = await response.json();
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let done = false;
 
-        if (data.message?.content) {
-        setMessages(prev => [
-            ...prev,
-            { role: 'assistant', content: data.message.content }
-        ]);
+      setIsTyping(false);
+
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+
+        if (value) {
+          const chunkText = decoder.decode(value, { stream: true });
+
+          setMessages((prev) => {
+            const newMessages = [...prev];
+            const lastIndex = newMessages.length - 1;
+            newMessages[lastIndex] = {
+              ...newMessages[lastIndex],
+              content: newMessages[lastIndex].content + chunkText
+            };
+            return newMessages;
+          });
         }
+      }
 
     } catch (error) {
         console.error("Erro:", error);
-        setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: "Houve um erro técnico na comunicação." }
-        ]);
+        setMessages(prev => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1] = { role: 'assistant', content: "Houve um erro técnico na comunicação." };
+          return newMessages;
+        });
     } finally {
         setIsTyping(false);
     }

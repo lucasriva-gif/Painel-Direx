@@ -1,32 +1,47 @@
-import { NextResponse } from "next/server";
-
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
+  const { model, messages, stream } = await req.json();
 
-    const response = await fetch("http://127.0.0.1:11434/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+  // Faz a requisição para a sua VM (se a API estiver na VM, use localhost)
+  const ollamaResponse = await fetch('http://127.0.0.1:11434/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model, messages, stream }),
+  });
 
-    if (!response.ok) {
-      const text = await response.text();
-      return NextResponse.json(
-        { error: "Erro ao comunicar com o Ollama", detail: text },
-        { status: 500 }
-      );
+  // Criamos um fluxo de leitura limpo para mandar ao Front-end
+  const readableStream = new ReadableStream({
+    async start(controller) {
+      const reader = ollamaResponse.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) return controller.close();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        
+        // O Ollama devolve vários JSONs separados por quebra de linha. 
+        // Lemos cada um e extraímos apenas o texto gerado.
+        const lines = chunk.split('\n').filter(Boolean);
+        for (const line of lines) {
+          try {
+            const data = JSON.parse(line);
+            if (data.message?.content) {
+              // Envia APENAS o texto puro para o seu React (ex: "A", " capital", " é")
+              controller.enqueue(new TextEncoder().encode(data.message.content));
+            }
+          } catch (e) {
+            console.error("Erro lendo chunk do Ollama", e);
+          }
+        }
+      }
+      controller.close();
     }
+  });
 
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error("Erro na rota /api/chat:", error);
-    return NextResponse.json(
-      { error: "Falha interna na comunicação com o modelo" },
-      { status: 500 }
-    );
-  }
+  return new Response(readableStream, {
+    headers: { 'Content-Type': 'text/plain' }
+  });
 }
