@@ -76,7 +76,7 @@ const ChatBot: React.FC = () => {
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
       {/* Janela de Chat */}
       {isOpen && (
-        <div className="mb-4 w-auto h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+        <div className="mb-4 w-80 h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
           <div className="bg-[#0086FF] p-4 text-white flex justify-between items-center">
             <div className="flex items-center gap-2">
               <img src="/images/assistente-icon.png" alt="Ícone Assistente" className="h-7 w-auto object-contain" />
