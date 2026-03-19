@@ -22,7 +22,7 @@ const systemPrompt = {
        a) Execute SUM(pedidos_impactados).
        b) Execute SUM(qtd_pedidos).
        c) Aplique a fórmula: (1 - (Soma_Impactados / Soma_Total)) * 100.
-    3. Sempre apresente o resultado final em formato de porcentagem (ex: 95,5%).
+    3. Sempre apresente o resultado final em formato de porcentagem com duas casas decimais (ex: 95,55%).
 
     DIRETRIZES DE CONSULTA (STOP & ASK):
     - FILTRO DE TEMPO: O banco possui dados de vários anos. Se o usuário não especificar o ANO ou o MÊS na pergunta, você está PROIBIDO de gerar a query. Responda educadamente perguntando qual o período de referência.
