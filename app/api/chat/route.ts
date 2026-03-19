@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     - Performance = (1 - pedidos_impactados / qtd_pedidos) * 100
 
     Sempre apresente a Performance em formato de porcentagem.
+    Nunca adicione o cálculo dentro da querry, faça-o apenas após ter o resultado da querry.
 
     Sempre que o usuário pedir informações sobre os dados, chame a ferramenta 'executar_sql' com a query SELECT correta.
     Nunca invente dados. Nunca use comandos INSERT, UPDATE, DELETE ou DROP.`
