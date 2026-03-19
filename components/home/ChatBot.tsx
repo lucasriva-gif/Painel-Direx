@@ -126,13 +126,32 @@ const ChatBot: React.FC = () => {
                         ul: ({children}) => <ul className="list-disc ml-4 mb-2">{children}</ul>,
                         ol: ({children}) => <ol className="list-decimal ml-4 mb-2">{children}</ol>,
                         li: ({children}) => <li className="mb-1">{children}</li>, 
-                        
+                        table: ({ children }) => (
+                          <div className="overflow-x-auto my-4 border rounded-lg">
+                            <table className="min-w-full divide-y divide-gray-200 text-xs">
+                              {children}
+                            </table>
+                          </div>
+                        ),
+                        thead: ({ children }) => <thead className="bg-gray-100">{children}</thead>,
+                        th: ({ children }) => (
+                          <th className="px-3 py-2 text-left font-bold uppercase tracking-wider border-b">
+                            {children}
+                          </th>
+                        ),
+                        td: ({ children }) => (
+                          <td className="px-3 py-2 whitespace-nowrap border-b border-gray-100">
+                            {children}
+                          </td>
+                        ),
+                        tr: ({ children }) => (
+                          <tr className="hover:bg-gray-50 transition-colors">{children}</tr>
+                        ),
                         pre: ({children, ...props}: any) => (
                           <pre {...props} className="bg-gray-200 p-3 rounded-md my-2 overflow-x-auto font-mono text-xs text-slate-800">
                             {children}
                           </pre>
                         ),
-                        
                         code: ({node, className, children, ...props}: any) => {
                           const match = /language-(\w+)/.exec(className || '');
                           
