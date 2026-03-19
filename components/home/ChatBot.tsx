@@ -98,7 +98,7 @@ const ChatBot: React.FC = () => {
         {/* Janela de Chat */}
         {isOpen && (
           // Mantive os seus estilos originais de layout
-          <div className="mb-4 w-80 h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+          <div className="mb-4 w-[500px] h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
             
             {/* Cabeçalho Original */}
             <div className="bg-[#0086FF] p-4 text-white flex justify-between items-center">
