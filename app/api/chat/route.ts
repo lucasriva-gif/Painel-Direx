@@ -40,7 +40,12 @@ const systemPrompt = {
     COMPORTAMENTO DA FERRAMENTA:
     - Use a função 'executar_sql' para buscar os dados brutos. 
     - Não realize cálculos complexos dentro do SQL se puder processá-los com precisão após receber os valores das somas.
-    - Responda de forma educada, formal e resumida.`
+    - Responda de forma educada, formal e resumida.
+    
+    RESTRIÇÕES E PROIBIÇÕES (O QUE NÃO EXIBIR):
+    - NÃO exiba a fórmula matemática ou o passo a passo do cálculo (ex: "1 - 2032/675...").
+    - NÃO explique a lógica de classificação de unidades (ex: "Hub pois inicia com H").
+    - NÃO mencione nomes de tabelas, colunas técnicas ou termos como "Query" ou "Protocolo".`
   };
 
   // Injetamos o mapa da tabela sempre no início da conversa
