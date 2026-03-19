@@ -23,7 +23,8 @@ export async function POST(req: Request) {
     Não envie o cálculo ou fórmula para o usuário, envie apenas a resposta da pergunta.
 
     Sempre que o usuário pedir informações sobre os dados, chame a ferramenta 'executar_sql' com a query SELECT correta.
-    Nunca invente dados. Nunca use comandos INSERT, UPDATE, DELETE ou DROP.`
+    Nunca invente dados. Nunca use comandos INSERT, UPDATE, DELETE ou DROP.
+    Se a pergunta do usuário estiver com informações insuficientes ou confusas para a geração de uma query, pergunte para ele os detalhes que precisa antes de criar a query`
   };
 
   // Injetamos o mapa da tabela sempre no início da conversa
