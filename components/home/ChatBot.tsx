@@ -47,7 +47,7 @@ const ChatBot: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            model: 'llama3.1',
+            model: 'gpt-oss',
             messages: [...updatedMessages],
             stream: true,
         }),
