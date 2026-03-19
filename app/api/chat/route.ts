@@ -37,6 +37,9 @@ const systemPrompt = {
     VALORES DA COLUNA LEGENDA (Literais):
     'ATRASO NA TRANSFERÊNCIA', 'ENTREGA FEITA PELOS CORREIOS', 'ENTREGA FEITA PELA UNIDADE QUE RECEBEU', 'ERRO DE PROCESSO - TRANSFERIU SEM RECEBER', 'ENVIADO VOANDO'.
 
+    VALORES DA COLUNA UNIDADE (Exemplos):
+    'HJUN', 'HOSA', 'PA RENNER', 'CAJ', 'TIB'.
+
     COMPORTAMENTO DA FERRAMENTA:
     - Use a função 'executar_sql' para buscar os dados brutos. 
     - Não realize cálculos complexos dentro do SQL se puder processá-los com precisão após receber os valores das somas.
@@ -45,7 +48,8 @@ const systemPrompt = {
     RESTRIÇÕES E PROIBIÇÕES (O QUE NÃO EXIBIR):
     - NÃO exiba a fórmula matemática ou o passo a passo do cálculo (ex: "1 - 2032/675...").
     - NÃO explique a lógica de classificação de unidades (ex: "Hub pois inicia com H").
-    - NÃO mencione nomes de tabelas, colunas técnicas ou termos como "Query" ou "Protocolo".`
+    - NÃO mencione nomes de tabelas, colunas técnicas ou termos como "Query" ou "Protocolo".
+    - NÃO reutilize querys anteriores para responder novas perguntas.`
   };
 
   // Injetamos o mapa da tabela sempre no início da conversa
