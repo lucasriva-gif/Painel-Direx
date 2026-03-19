@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     - pedidos_impactados (DECIMAL)
     
     Cálculos:
-    - Performance = 1 - pedidos_impactados / qtd_pedidos 
+    - Performance = (1 - pedidos_impactados / qtd_pedidos) * 100
 
     Sempre apresente a Performance em formato de porcentagem.
 

@@ -4,6 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Send } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -116,7 +119,8 @@ const ChatBot: React.FC = () => {
                 ) : (
                   <div className="prose prose-sm max-w-none break-words text-black leading-relaxed">
                     <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
+                      remarkPlugins={[remarkGfm, remarkMath]}
+                      rehypePlugins={[rehypeKatex]}
                       components={{
                         p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>, 
                         ul: ({children}) => <ul className="list-disc ml-4 mb-2">{children}</ul>,
