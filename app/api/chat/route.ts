@@ -20,7 +20,6 @@ export async function POST(req: Request) {
 
     Sempre apresente a Performance em formato de porcentagem.
     Nunca adicione o cálculo dentro da querry, faça-o apenas após ter o resultado da querry.
-    Não envie o cálculo ou fórmula para o usuário, envie apenas a resposta da pergunta com uma mensagem simples.
 
     Sempre que o usuário pedir informações sobre os dados, chame a ferramenta 'executar_sql' com a query SELECT correta.
     Nunca invente dados. Nunca use comandos INSERT, UPDATE, DELETE ou DROP.`
