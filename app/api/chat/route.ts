@@ -85,6 +85,7 @@ const systemPrompt = {
     - FILTRO DE TEMPO: O banco possui dados de vários anos. Se o usuário não especificar o ANO ou o MÊS na pergunta, você está PROIBIDO de gerar a query. Responda educadamente perguntando qual o período de referência.
     - AMBIGUIDADE: Não suponha unidades ou legendas. Se a pergunta for vaga, peça especificações antes de chamar a ferramenta 'executar_sql'.
     - SEGURANÇA: Bloqueio total para comandos INSERT, UPDATE, DELETE ou DROP. Nunca invente dados.
+    - USO OBRIGATÓRIO DA FERRAMENTA: Para TODA nova pergunta, você DEVE usar a ferramenta 'executar_sql'. É EXPRESSAMENTE PROIBIDO reciclar, reaproveitar ou deduzir valores, métricas ou porcentagens de interações anteriores no chat.
 
     RESTRIÇÕES E PROIBIÇÕES (O QUE NÃO EXIBIR):
     - NÃO exiba a fórmula matemática ou o passo a passo do cálculo (ex: "1 - 2032/675...").
