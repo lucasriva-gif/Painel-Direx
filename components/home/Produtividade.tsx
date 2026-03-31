@@ -1,5 +1,5 @@
-import MetricCard from './MetricCardProd'
-import DashCard from './DashCardProd'
+import MetricCard from './MetricCard'
+import DashCard from './DashCard'
 
 const metricas = [
   { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},

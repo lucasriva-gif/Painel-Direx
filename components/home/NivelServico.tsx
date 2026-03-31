@@ -1,12 +1,7 @@
-import MetricCard from './MetricCardNS'
-import DashCard from './DashCardNS'
-
-const metricas = [
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '-0,3%', positivo: false, constante: " em relação à semana anterior"},
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},
-]
+import MetricCard from './MetricCard'
+import DashCard from './DashCard'
+import { processarMetricas } from '@/lib/metricas'
+import { fetchDadosPlanilha, fetchUltimaAtualizacaoPlanilha } from '@/lib/googleSheets' 
 
 const dashboards = [
   { nome: 'Qualidade Operações Leves', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/Psvenda-PerfomanceQualidadeGFL/PerformanceResumo?:iid=1', icone: '/images/icones/dash-1.jpg' },
@@ -20,21 +15,22 @@ const dashboards = [
   { nome: 'Consta Entregue', descricao: '(Acesse PPT ou Dash)', href: 'https://docs.google.com/presentation/d/1PJbPKD39CybxiL9TJF68B92fh4pwFCmirkpkPqfozI8/edit?slide=id.g3af52249f21_2_31#slide=id.g3af52249f21_2_31', icone: '/images/icones/dash-3.svg' },
 ]
 
-export default function NivelServico() {
-  return (
-    <section
-      id="nivel-servico"
-      className="scroll-mt-14 w-full px-6 py-10 border-1 border-[#CECFD1]"
-      style={{
-        background: 'linear-gradient(to top right, #e9f5ff, #ffffff 80%)',
-      }}
-    >
-      <div className="max-w-5xl mx-auto">
+export default async function NivelServico() {
+  // 1. Busca os dados reais e transformados em objetos
+  const [dadosBrutos, dataAtualizacaoFormatada] = await Promise.all([
+    fetchDadosPlanilha(),
+    fetchUltimaAtualizacaoPlanilha()
+  ]);
+  
+  // 2. Passa os dados brutos pela regra de negócio (cálculos de porcentagem e variação)
+  const metricas = processarMetricas(dadosBrutos);
 
-        {/* Cabeçalho */}
+  return (
+    <section id="nivel-servico" className="scroll-mt-14 w-full px-6 py-10 border-1 border-[#CECFD1]" style={{ background: 'linear-gradient(to top right, #e9f5ff, #ffffff 80%)' }}>
+      <div className="max-w-5xl mx-auto">
         <h2 className="text-2xl font-bold text-[#0086FF] mb-1">Nível de serviço</h2>
-        <p className="text-sm text-[#788089] mb-8">
-          Atualizado segunda-feira, 9 de março de 2025
+        <p className="text-sm text-[#788089] mb-8 capitalize">
+          Atualizado {dataAtualizacaoFormatada}
         </p>
 
         {/* Cards de métricas — linha 1: 3 cards */}
