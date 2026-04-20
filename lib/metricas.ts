@@ -18,15 +18,28 @@ export type MetricaCard = {
   constante: string;
 };
 
-// Funções auxiliares de data (simplificadas)
+// Funções auxiliares de data
+
 const isMesAtual = (data: Date, hoje: Date) => {
   return data.getMonth() === hoje.getMonth() && data.getFullYear() === hoje.getFullYear();
 };
 
-const getSemanaDoAno = (data: Date) => {
-  const primeiroDiaAno = new Date(data.getFullYear(), 0, 1);
-  const diasPassados = Math.floor((data.getTime() - primeiroDiaAno.getTime()) / (24 * 60 * 60 * 1000));
-  return Math.ceil((data.getDay() + 1 + diasPassados) / 7);
+/**
+ * Retorna o número da semana ISO (1–53) de uma data.
+ * BUG CORRIGIDO: a versão anterior usava data.getDay() (dia da semana, 0–6)
+ * no lugar do número ordinal do dia no ano, gerando semanas incorretas.
+ */
+const getSemanaDoAno = (data: Date): number => {
+  // Clona a data e move para a quinta-feira da semana (padrão ISO 8601)
+  const d = new Date(Date.UTC(data.getFullYear(), data.getMonth(), data.getDate()));
+  // Dia da semana: segunda = 1 ... domingo = 7
+  const diaSemana = d.getUTCDay() || 7;
+  // Move para a quinta-feira da mesma semana ISO
+  d.setUTCDate(d.getUTCDate() + 4 - diaSemana);
+  // Primeiro dia do ano dessa quinta-feira
+  const primeiroDiaAno = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  // Número de semanas completas entre o primeiro dia do ano e a quinta-feira
+  return Math.ceil(((d.getTime() - primeiroDiaAno.getTime()) / 86_400_000 + 1) / 7);
 };
 
 export function processarMetricas(dadosBrutos: LinhaPlanilha[]): MetricaCard[] {
@@ -36,59 +49,89 @@ export function processarMetricas(dadosBrutos: LinhaPlanilha[]): MetricaCard[] {
   const semanaAnterior = semanaAtual - 1;
 
   return empresas.map((empresa) => {
-    // Filtra apenas os dados da empresa atual do loop
     const dadosEmpresa = dadosBrutos.filter((linha) => linha.Empresa === empresa);
 
-    // Variáveis para acumular as somas
     let somaDentroMes = 0;
     let somaPedidoMes = 0;
-    
+
     let somaDentroSemanaAtual = 0;
     let somaPedidoSemanaAtual = 0;
-    
+
     let somaDentroSemanaAnterior = 0;
     let somaPedidoSemanaAnterior = 0;
 
-    // Itera sobre as linhas para somar os valores de acordo com o período
     dadosEmpresa.forEach((linha) => {
-      const dataEntrega = new Date(linha.data_entrega_prevista_cliente);
+      // Garante que a data seja interpretada em UTC para evitar
+      // off-by-one causado por fuso horário local
+    const rawDate = linha.data_entrega_prevista_cliente;
+    let dataEntrega: Date;
+
+    if (rawDate.includes('/')) {
+      // Formato DD/MM/YYYY vindo do Google Sheets
+      const [dia, mes, ano] = rawDate.split('/').map(Number);
+      dataEntrega = new Date(Date.UTC(ano, mes - 1, dia));
+    } else {
+      // Formato ISO YYYY-MM-DD
+      dataEntrega = new Date(rawDate + 'T00:00:00Z');
+    }
+
       const qtdDentro = Number(linha['sum Qtd Dentro']) || 0;
       const qtdPedido = Number(linha['sum Qtd Pedido']) || 0;
       const semanaDaLinha = getSemanaDoAno(dataEntrega);
 
-      // Agregação do Mês Atual (para o valor principal)
+      // Mês atual → valor principal do card
       if (isMesAtual(dataEntrega, hoje)) {
         somaDentroMes += qtdDentro;
         somaPedidoMes += qtdPedido;
       }
 
-      // Agregação da Semana Atual
-      if (semanaDaLinha === semanaAtual && dataEntrega.getFullYear() === hoje.getFullYear()) {
+      // Semana atual
+      if (
+        semanaDaLinha === semanaAtual &&
+        dataEntrega.getUTCFullYear() === hoje.getFullYear()
+      ) {
         somaDentroSemanaAtual += qtdDentro;
         somaPedidoSemanaAtual += qtdPedido;
       }
 
-      // Agregação da Semana Anterior
-      if (semanaDaLinha === semanaAnterior && dataEntrega.getFullYear() === hoje.getFullYear()) {
+      // Semana anterior
+      if (
+        semanaDaLinha === semanaAnterior &&
+        dataEntrega.getUTCFullYear() === hoje.getFullYear()
+      ) {
         somaDentroSemanaAnterior += qtdDentro;
         somaPedidoSemanaAnterior += qtdPedido;
       }
     });
 
-    // Cálculos finais de porcentagem (evitando divisão por zero)
-    const valorMes = somaPedidoMes > 0 ? somaDentroMes / somaPedidoMes : 0;
-    const valorSemanaAtual = somaPedidoSemanaAtual > 0 ? somaDentroSemanaAtual / somaPedidoSemanaAtual : 0;
-    const valorSemanaAnterior = somaPedidoSemanaAnterior > 0 ? somaDentroSemanaAnterior / somaPedidoSemanaAnterior : 0;
+    // NS como percentual (0–100)
+    const nsMes = somaPedidoMes > 0 ? (somaDentroMes / somaPedidoMes) * 100 : 0;
+    const nsSemanaAtual =
+      somaPedidoSemanaAtual > 0 ? (somaDentroSemanaAtual / somaPedidoSemanaAtual) * 100 : null;
+    const nsSemanaAnterior =
+      somaPedidoSemanaAnterior > 0
+        ? (somaDentroSemanaAnterior / somaPedidoSemanaAnterior) * 100
+        : null;
 
-    // Variação percentual entre semanas
-    const variacaoCalculada = (valorSemanaAtual - valorSemanaAnterior) * 100;
+    let variacaoStr: string;
+    let positivo: boolean;
+
+    if (nsSemanaAtual !== null && nsSemanaAnterior !== null) {
+      const delta = nsSemanaAtual - nsSemanaAnterior; // diferença em p.p.
+      variacaoStr = `${delta > 0 ? '+' : ''}${delta.toFixed(1).replace('.', ',')} p.p.`;
+      positivo = delta >= 0;
+    } else {
+      // Sem dados suficientes para comparar semanas
+      variacaoStr = '—';
+      positivo = true;
+    }
 
     return {
       nome: empresa,
-      valor: `${(valorMes * 100).toFixed(1).replace('.', ',')}%`,
-      variacao: `${variacaoCalculada > 0 ? '+' : ''}${variacaoCalculada.toFixed(1).replace('.', ',')}%`,
-      positivo: variacaoCalculada >= 0,
-      constante: " em relação à semana anterior",
+      valor: `${nsMes.toFixed(1).replace('.', ',')}%`,
+      variacao: variacaoStr,
+      positivo,
+      constante: ' em relação à semana anterior',
     };
   });
 }

@@ -12,10 +12,10 @@ export default function HomePage() {
       <Navbar />
       <main>
         {/* seções */}
-        <Hero />     
-        <ResumoCard />                                   
+        <Hero />                                       
         <NivelServico />
         <Produtividade />
+        <ResumoCard />       
       </main>
       <ChatBot />
       <Footer />
