@@ -1,13 +1,13 @@
 import { GoogleAuth } from 'google-auth-library';
 import { LinhaPlanilha } from './metricas'; 
+import credentials from '../credentials.json';
 
-// Função auxiliar para centralizar a geração do token e evitar repetição de código
+// Função auxiliar usando as credenciais importadas do JSON
 async function getAuthToken(scopes: string[]): Promise<string> {
   const auth = new GoogleAuth({
     credentials: {
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      // O replace garante que as quebras de linha (\n) do .env sejam lidas corretamente
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'), 
+      client_email: credentials.client_email,
+      private_key: credentials.private_key,
     },
     scopes: scopes,
   });
@@ -75,47 +75,32 @@ export async function fetchDadosPlanilha(): Promise<LinhaPlanilha[]> {
   }
 }
 
-export async function fetchUltimaAtualizacaoPlanilha(): Promise<string> {
-  const sheetId = process.env.SPREADSHEET_ID;
-  // Note que removemos o ?key= da URL, pois agora usamos o token no header
-  const url2 = `https://www.googleapis.com/drive/v3/files/${sheetId}?fields=modifiedTime`;
+// Substitui fetchUltimaAtualizacaoPlanilha inteiramente
+export async function fetchUltimaAtualizacaoPlanilha(dados: LinhaPlanilha[]): Promise<string> {
+  if (!dados || dados.length === 0) return 'Data indisponível';
 
-  try {
-    // 1. Gera o token passando o escopo do Google Drive
-    const token = await getAuthToken(['https://www.googleapis.com/auth/drive.metadata.readonly']);
+  // Pega todas as datas válidas da coluna C (data_entrega_prevista_cliente)
+  const datas = dados
+    .map((linha) => {
+      const raw = linha.data_entrega_prevista_cliente;
+      if (!raw) return null;
 
-    // 2. Faz o fetch usando o Token no Header
-    const res = await fetch(url2, { 
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      next: { revalidate: 3600 } 
-    });
+      if (raw.includes('/')) {
+        const [dia, mes, ano] = raw.split('/').map(Number);
+        return new Date(Date.UTC(ano, mes - 1, dia));
+      }
+      return new Date(raw + 'T00:00:00Z');
+    })
+    .filter((d): d is Date => d !== null && !isNaN(d.getTime()));
 
-    if (!res.ok) {
-      const errorBody = await res.text();
-      console.error("🚨 Detalhes do erro Google Drive:", errorBody);
-      throw new Error('Falha ao buscar metadados do Drive');
-    }
+  if (datas.length === 0) return 'Data indisponível';
 
-    const data = await res.json();
-    
-    if (data.modifiedTime) {
-      const dataAtualizacao = new Date(data.modifiedTime);
-      
-      return new Intl.DateTimeFormat('pt-BR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      }).format(dataAtualizacao);
-    }
-    
-    return 'Data indisponível';
-  } catch (error) {
-    console.error("Erro ao buscar data de atualização:", error);
-    return 'Data indisponível'; 
-  }
+  const dataMaxima = new Date(Math.max(...datas.map((d) => d.getTime())));
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(dataMaxima);
 }

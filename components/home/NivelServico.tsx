@@ -17,11 +17,8 @@ const dashboards = [
 
 export default async function NivelServico() {
   // 1. Busca os dados reais e transformados em objetos
-  const [dadosBrutos, dataAtualizacaoFormatada] = await Promise.all([
-    fetchDadosPlanilha(),
-    fetchUltimaAtualizacaoPlanilha()
-  ]);
-  
+  const dadosBrutos = await fetchDadosPlanilha();
+  const dataAtualizacaoFormatada = await fetchUltimaAtualizacaoPlanilha(dadosBrutos);
   // 2. Passa os dados brutos pela regra de negócio (cálculos de porcentagem e variação)
   const metricas = processarMetricas(dadosBrutos);
 
