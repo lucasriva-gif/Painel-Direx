@@ -117,8 +117,8 @@ export function processarMetricas(dadosBrutos: LinhaPlanilha[]): MetricaCard[] {
     let positivo: boolean;
 
     if (nsSemanaAtual !== null && nsSemanaAnterior !== null) {
-      const delta = nsSemanaAtual - nsSemanaAnterior; // diferença em p.p.
-      variacaoStr = `${delta > 0 ? '+' : ''}${delta.toFixed(1).replace('.', ',')} p.p.`;
+      const delta = nsSemanaAtual - nsSemanaAnterior; // diferença em %
+      variacaoStr = `${delta > 0 ? '+' : ''}${delta.toFixed(1).replace('.', ',')} %`;
       positivo = delta >= 0;
     } else {
       // Sem dados suficientes para comparar semanas
