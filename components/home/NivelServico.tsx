@@ -12,7 +12,6 @@ const dashboards = [
   { nome: 'Época 1P', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/PsVendas-NveldeServiopoca1P/EpocaGeral?:iid=2 Pós Venda - Nível de Serviço HUB GFL -', icone: '/images/icones/dash-1.jpg' },
   { nome: 'Netshoes 1P', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/NveldeServio-Netshoes/NveldeServio-Netshoes?:iid=3', icone: '/images/icones/dash-1.jpg' },
   { nome: '1P Saída CD Entrega a Domicílio', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/NveldeservioDEZ2023-PILOTO/PerformanceGeral?:iid=2', icone: '/images/icones/dash-1.jpg' },
-  { nome: 'Consta Entregue', descricao: '(Acesse PPT ou Dash)', href: 'https://docs.google.com/presentation/d/1PJbPKD39CybxiL9TJF68B92fh4pwFCmirkpkPqfozI8/edit?slide=id.g3af52249f21_2_31#slide=id.g3af52249f21_2_31', icone: '/images/icones/dash-3.svg' },
 ]
 
 export default async function NivelServico() {
@@ -31,21 +30,14 @@ export default async function NivelServico() {
         </p>
 
         {/* Cards de métricas — linha 1: 3 cards */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {metricas.slice(0, 2).map((m, i) => (
-            <MetricCard key={i} {...m} />
-          ))}
-        </div>
-
-        {/* Cards de métricas — linha 2: 2 cards */}
-        <div className="grid grid-cols-2 gap-4 mb-10">
-          {metricas.slice(2, 4).map((m, i) => (
+        <div className="grid grid-cols-4 gap-4 mb-10">
+          {metricas.slice(0, 4).map((m, i) => (
             <MetricCard key={i} {...m} />
           ))}
         </div>
 
         {/* DashCards — grade 3 colunas */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {dashboards.map((d, i) => (
             <DashCard key={i} {...d} />
           ))}

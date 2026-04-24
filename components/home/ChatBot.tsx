@@ -75,8 +75,8 @@ const TabelaComExportacao = ({
   };
 
   return (
-    <div className="my-4 border border-white/10 rounded-lg overflow-hidden bg-slate-900">
-      <div className="flex justify-end bg-slate-800/50 p-2 border-b border-white/10">
+    <div className="my-4 border border-white/10 rounded-lg overflow-hidden bg-white">
+      <div className="flex justify-end bg-white p-2 border-b border-white/10">
         <button
           onClick={exportarParaExcel}
           disabled={exportando}
@@ -92,8 +92,8 @@ const TabelaComExportacao = ({
         </button>
       </div>
 
-      <div className="overflow-x-auto p-1 bg-slate-900">
-        <table ref={tableRef} className="min-w-full divide-y divide-gray-200/20 text-xs bg-slate-900">
+      <div className="overflow-x-auto p-1 bg-white">
+        <table ref={tableRef} className="min-w-full divide-y divide-gray-200/20 text-xs bg-white">
           {children}
         </table>
       </div>
@@ -208,7 +208,7 @@ const ChatBot: React.FC = () => {
     const conteudoLimpo = removerBlocoOculto(content);
 
     return (
-      <div className="prose prose-sm max-w-none break-words leading-relaxed">
+      <div className="prose prose-sm max-w-none break-words text-black leading-relaxed">
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkMath]}
           rehypePlugins={[rehypeKatex]}
@@ -223,7 +223,7 @@ const ChatBot: React.FC = () => {
                 {children}
               </TabelaComExportacao>
             ),
-            thead: ({ children }) => <thead className="bg-slate-900">{children}</thead>,
+            thead: ({ children }) => <thead className="bg-white">{children}</thead>,
             th: ({ children }) => (
               <th className="px-3 py-2 text-left font-bold uppercase tracking-wider border-b">
                 {children}
@@ -265,31 +265,24 @@ const ChatBot: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
       {isOpen && (
-        <div className="mb-4 w-[500px] h-[500px] bg-[#1B2336] rounded-xl shadow-2xl flex flex-col overflow-hidden border border-white/10">
+        <div className="mb-4 w-[500px] h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
           
           {/* Cabeçalho */}
-          <div className="bg-slate-900 p-4 text-white flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <img src="/images/assistente-icon.png" alt="Ícone Assistente" className="h-8 w-auto object-contain" />
-              <span className="font-bold">Assistente Nexus</span>
-            </div>
+            <div className="bg-[#0086FF] p-4 text-white flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <img src="/images/assistente-icon.png" alt="Ícone Assistente" className="h-7 w-auto object-contain" />
+                <span className="font-bold">Assistente Direx</span>
+              </div>
             <button onClick={() => setIsOpen(false)}><X size={20} /></button>
           </div>
 
           {/* Corpo */}
-          <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto space-y-4 border border-white/10 bg-white/[0.05]">
+          <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50">
             {messages.map((msg, i) => {
               if (msg.role !== 'user' && msg.content.trim() === '') return null;
 
               return (
-                <div
-                  key={i}
-                  className={`p-2 rounded-lg max-w-[80%] ${
-                    msg.role === 'user'
-                      ? 'bg-slate-900 border-white/10 ml-auto text-white'
-                      : 'border border-white/10 bg-white/[0.05] px-5 py-5 shadow-[0_10px_30px_rgba(0,0,0,0.18)] text-white'
-                  }`}
-                >
+                <div key={i} className={`p-2 rounded-lg max-w-[80%] ${msg.role === 'user' ? 'bg-[#0073DE] ml-auto text-white' : 'bg-[#F4F6F8] shadow-sm text-black'}`}>
                   {msg.role === 'user' ? (
                     <p className="leading-relaxed">{msg.content}</p>
                   ) : (
@@ -300,22 +293,22 @@ const ChatBot: React.FC = () => {
             })}
 
             {isTyping && (
-              <div className="border border-white/10 bg-white/[0.05] p-3 rounded-2xl w-16 mr-auto rounded-tl-none flex gap-1 justify-center items-center shadow-sm">
-                <span className="animate-bounce inline-block h-1 w-1 bg-white rounded-full"></span>
-                <span className="animate-bounce inline-block h-1 w-1 bg-white rounded-full [animation-delay:0.2s]"></span>
-                <span className="animate-bounce inline-block h-1 w-1 bg-white rounded-full [animation-delay:0.4s]"></span>
+              <div className="bg-white text-slate-500 border border-slate-200 p-3 rounded-2xl w-16 mr-auto rounded-tl-none flex gap-1 justify-center items-center shadow-sm">
+                <span className="animate-bounce inline-block h-1 w-1 bg-slate-400 rounded-full"></span>
+                <span className="animate-bounce inline-block h-1 w-1 bg-slate-400 rounded-full [animation-delay:0.2s]"></span>
+                <span className="animate-bounce inline-block h-1 w-1 bg-slate-400 rounded-full [animation-delay:0.4s]"></span>
               </div>
             )}
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t flex gap-2 border border-white/10 bg-white/[0.05] items-center">
+          <div className="p-3 border-t flex gap-2 bg-white">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !isTyping && sendMessage()}
               placeholder="Digite uma mensagem"
-              className="text-white flex-1 text-sm outline-none border rounded-full px-3 py-1 focus:border-[#0086FF] bg-transparent"
+              className="text-[#838383] flex-1 text-sm outline-none border rounded-full px-3 py-1 focus:border-[#0086FF]"
             />
             <div className="flex items-center justify-end w-[64px]">
               {abortController && isTyping && (
@@ -343,7 +336,7 @@ const ChatBot: React.FC = () => {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-[#272E40] shadow-[0_10px_30px_rgba(0,0,0,0.18)] p-1 rounded-full text-white border border-white/10 hover:scale-110 transition-transform active:scale-95"
+        className="bg-[#ffffff] p-1 rounded-full shadow-lg text-white border border-gray-300 hover:scale-110 transition-transform active:scale-95"
       >
         <img src="/images/chat-button-icon.png" alt="Abrir Chat" className="h-12 w-auto object-contain" />
       </button>

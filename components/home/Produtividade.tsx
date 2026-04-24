@@ -2,16 +2,17 @@ import MetricCard from './MetricCard'
 import DashCard from './DashCard'
 
 const metricas = [
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '-0,3%', positivo: false, constante: " em relação à semana anterior"},
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},
-  { valor: '98,7%', nome: 'Nome do índice', variacao: '+0,3%', positivo: true, constante: " em relação à semana anterior"},
+  { valor: '??,??%', nome: 'Nome do índice', variacao: '+?,?%', positivo: true, constante: " em relação à semana anterior"},
+  { valor: '??,??%', nome: 'Nome do índice', variacao: '+?,?%', positivo: false, constante: " em relação à semana anterior"},
+  { valor: '??,??%', nome: 'Nome do índice', variacao: '+?,?%', positivo: true, constante: " em relação à semana anterior"},
+  { valor: '??,??%', nome: 'Nome do índice', variacao: '+?,?%', positivo: true, constante: " em relação à semana anterior"},
 ]
 
 const dashboards = [
   { nome: 'Carteira CDs', descricao: 'Descrição em 1 linha', href: 'https://lookerstudio.google.com/u/0/reporting/767e51a9-f613-4f6d-9eb5-20ee385d5c5d/page/p_x8qfw2rvmd', icone: '/images/icones/dash-2.svg' },
   { nome: 'Aderência PMT CDs', descricao: 'Descrição em 1 linha', href: 'https://bi.luizalabs.com/#/site/rede/views/AcompanhamentoEntradasRealTime/CockPit_CDs_CurrentDate?:iid=1', icone: '/images/icones/dash-1.jpg' },
-  { nome: 'Avaria Transporte', descricao: '(Acesse PPT ou Dash)', href: 'https://google.com/', icone: '/images/icones/dash-3.svg' },
+  { nome: 'Carteira LEVES', descricao: 'Descrição em 1 linha', href: 'https://google.com', icone: '/images/icones/dash-1.jpg' },
+  { nome: 'Aderência PMT LEVES', descricao: 'Descrição em 1 linha', href: 'https://google.com', icone: '/images/icones/dash-1.jpg' },
 ]
 
 export default function Produtividade() {
@@ -32,21 +33,15 @@ export default function Produtividade() {
         </p>
 
         {/* Cards de métricas — linha 1: 3 cards */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {metricas.slice(0, 2).map((m, i) => (
+        <div className="grid grid-cols-4 gap-4 mb-10">
+          {metricas.slice(0, 4).map((m, i) => (
             <MetricCard key={i} {...m} />
           ))}
         </div>
 
-        {/* Cards de métricas — linha 2: 2 cards */}
-        <div className="grid grid-cols-2 gap-4 mb-10">
-          {metricas.slice(2, 4).map((m, i) => (
-            <MetricCard key={i} {...m} />
-          ))}
-        </div>
 
         {/* DashCards — grade 3 colunas */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {dashboards.map((d, i) => (
             <DashCard key={i} {...d} />
           ))}

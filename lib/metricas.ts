@@ -1,10 +1,8 @@
-// lib/metricas.ts
-
 // 1. Tipagem dos dados brutos vindos da planilha
 export type LinhaPlanilha = {
   Empresa: string;
   MODAL: string;
-  data_entrega_prevista_cliente: string; // Formato esperado: YYYY-MM-DD ou ISO
+  data_entrega_prevista_cliente: string; 
   'sum Qtd Dentro': number;
   'sum Qtd Pedido': number;
 };
@@ -24,11 +22,6 @@ const isMesAtual = (data: Date, hoje: Date) => {
   return data.getMonth() === hoje.getMonth() && data.getFullYear() === hoje.getFullYear();
 };
 
-/**
- * Retorna o número da semana ISO (1–53) de uma data.
- * BUG CORRIGIDO: a versão anterior usava data.getDay() (dia da semana, 0–6)
- * no lugar do número ordinal do dia no ano, gerando semanas incorretas.
- */
 const getSemanaDoAno = (data: Date): number => {
   // Clona a data e move para a quinta-feira da semana (padrão ISO 8601)
   const d = new Date(Date.UTC(data.getFullYear(), data.getMonth(), data.getDate()));
@@ -44,11 +37,12 @@ const getSemanaDoAno = (data: Date): number => {
 
 export function processarMetricas(dadosBrutos: LinhaPlanilha[]): MetricaCard[] {
   const empresas = ['3P MAGALU', 'EPOCA', 'NETSHOES', 'SAIDA CD'];
+  const empresas_nome = ['3P MAGALU ENTREGAS', '1P ÉPOCA', '1P NETSHOES', '1P MAGALU']
   const hoje = new Date();
   const semanaAtual = getSemanaDoAno(hoje);
   const semanaAnterior = semanaAtual - 1;
 
-  return empresas.map((empresa) => {
+  return empresas.map((empresa, index) => { 
     const dadosEmpresa = dadosBrutos.filter((linha) => linha.Empresa === empresa);
 
     let somaDentroMes = 0;
@@ -127,7 +121,7 @@ export function processarMetricas(dadosBrutos: LinhaPlanilha[]): MetricaCard[] {
     }
 
     return {
-      nome: empresa,
+      nome: empresas_nome[index],
       valor: `${nsMes.toFixed(1).replace('.', ',')}%`,
       variacao: variacaoStr,
       positivo,
