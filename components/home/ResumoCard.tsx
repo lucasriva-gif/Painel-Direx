@@ -3,9 +3,7 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
-const RESUMO_TEXTO = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vel arcu mattis, tempor ex sed, fringilla risus. Vivamus elementum, sapien a interdum sagittis, arcu purus iaculis elit, vel efficitur lacus massa eget risus.
-Vivamus id leo et tortor gravida facilisis vel sed libero. Mauris aliquet est dapibus, tincidunt risus eget, sollicitudin felis. Morbi at pellentesque eros. Aenean ac nisl dapibus, tincidunt arcu vitae, molestie diam.
-Quisque ultrices, velit eu vehicula ullamcorper, sem purus porttitor ipsum, vitae tristique felis lectus commodo enim. Proin ac ligula hendrerit, consequat tortor eu, ultrices tellus.`
+const RESUMO_TEXTO = `Este portal foi desenvolvido para centralizar as informações estratégicas do Magalog, oferecendo uma visão analítica e em tempo real dos nossos principais indicadores de performance. O objetivo deste painel é fornecer subsídios para a análise, focando em dois pilares fundamentais: Indicadores de Produtividade e  Nível de Serviço (SLA)`
 
 function getDataAtual() {
   return new Date().toLocaleDateString('pt-BR', {
