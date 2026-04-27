@@ -14,6 +14,7 @@ export type MetricaCard = {
   variacao: string;
   positivo: boolean;
   constante: string;
+  corFarol: 'roxo' | 'vermelho' | 'verde' | 'azul' | 'default';
 };
 
 // Funções auxiliares de data
@@ -120,12 +121,29 @@ export function processarMetricas(dadosBrutos: LinhaPlanilha[]): MetricaCard[] {
       positivo = true;
     }
 
+    let corFarol: 'roxo' | 'vermelho' | 'verde' | 'azul' | 'default' = 'default';
+    const nomeMetrica = empresas_nome[index];
+
+    if (nomeMetrica === '3P MAGALU ENTREGAS') {
+      if (nsMes < 93) corFarol = 'roxo';
+      else if (nsMes < 95) corFarol = 'vermelho';   // 93 a 94.9
+      else if (nsMes <= 96.4) corFarol = 'verde'; // 95 a 96.4
+      else corFarol = 'azul';                       // > 96.4
+    } else {
+      // 1P ÉPOCA, 1P NETSHOES e 1P MAGALU
+      if (nsMes < 94) corFarol = 'roxo';
+      else if (nsMes < 96) corFarol = 'vermelho';   // 94 a 95.9
+      else if (nsMes <= 97.4) corFarol = 'verde'; // 96 a 97.4
+      else corFarol = 'azul';                       // > 97.4
+    }
+
     return {
       nome: empresas_nome[index],
       valor: `${nsMes.toFixed(1).replace('.', ',')}%`,
       variacao: variacaoStr,
       positivo,
       constante: ' em relação à semana anterior',
+      corFarol,
     };
   });
 }
